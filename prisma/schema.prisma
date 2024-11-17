@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  // provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model tokens {
+  token_id  String    @id @default(uuid())
+  token     String
+  user_id   String
+  user      user?     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  expires   DateTime
+  type      String    @default("ACCESS")
+  is_active Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model user {
+  user_id               String            @id @default(uuid())
+  name                  String?
+  email_address         String?           @unique
+  mobile_number         String            @unique
+  password              String
+  designation           String?
+  roles                 Role
+  target_freq_per_month String?
+  is_active             Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  deletedAt             DateTime?
+  tokens                tokens[]
+  assigned_survey       assigned_survey[]
+
+  @@index([email_address, mobile_number])
+}
+
+model hostel {
+  hostel_id              String            @id @default(uuid())
+  district_name          String?
+  hostel_name_tamil      String?
+  hostel_name_english    String
+  hostel_address_tamil   String?
+  hostel_address_english String
+  warden_name            String
+  mobile_number          String            @unique
+  is_active              Boolean           @default(true)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  deletedAt              DateTime?
+  assigned_survey        assigned_survey[]
+}
+
+model categories {
+  category_id   String     @id @default(uuid())
+  category_name String     @unique
+  is_active     Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deletedAt     DateTime?
+  question      question[]
+}
+
+model question {
+  question_id       String              @id @default(uuid())
+  question_category categories          @relation(fields: [category_id], references: [category_id])
+  performance_score Int
+  input_type        String
+  question          String              @unique
+  question_desc     String?
+  options           option[]
+  is_active         Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?
+  assigned_question assigned_question[]
+  category_id       String
+}
+
+model option {
+  option_id   String    @id @default(uuid())
+  option_text String   
+  question_id String?
+  question    question? @relation(fields: [question_id], references: [question_id])
+  is_active   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model assigned_survey {
+  assigned_survey String    @id @default(uuid())
+  user_id         String
+  hostel_id       String
+  user            user?     @relation(fields: [user_id], references: [user_id])
+  hostel          hostel?   @relation(fields: [hostel_id], references: [hostel_id])
+  is_active       Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  @@index([user_id, hostel_id])
+}
+
+model survey {
+  survey_id   String    @id @default(uuid())
+  survey_name String
+  survey_type String?
+  status      Boolean   @default(false)
+  is_active   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  section     section[]
+}
+
+model section {
+  section_id        String              @id @default(uuid())
+  section_title     String?
+  section_desc      String?
+  survey_id         String
+  survey            survey?             @relation(fields: [survey_id], references: [survey_id])
+  is_active         Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?
+  assigned_question assigned_question[]
+}
+
+model assigned_question {
+  assigned_question_id String    @id @default(uuid())
+  section_id           String
+  section              section?  @relation(fields: [section_id], references: [section_id])
+  question_id          String
+  question             question? @relation(fields: [question_id], references: [question_id])
+  is_mandatory         Boolean   @default(true)
+  condition_to_display Json?
+  is_active            Boolean   @default(true)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+}
+
+model otp {
+  otp_id        String   @id @default(uuid())
+  mobile_number String
+  otp           String
+  createdAt     DateTime @default(now())
+  expires_in    String
+}
+
+model softdeletedItems {
+  softdeleted_id String   @id @default(uuid())
+  item_id        String
+  model_name     String
+  is_active      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}

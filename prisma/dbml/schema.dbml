@@ -1,0 +1,135 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table tokens {
+  token_id String [pk]
+  token String [not null]
+  user_id String [not null]
+  user user
+  expires DateTime [not null]
+  type String [not null, default: 'ACCESS']
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table user {
+  user_id String [pk]
+  name String
+  email_address String [unique]
+  mobile_number String [unique, not null]
+  password String [not null]
+  designation String
+  roles Role [not null]
+  target_freq_per_month String
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  tokens tokens [not null]
+}
+
+Table hostel {
+  hostel_id String [pk]
+  district_name String
+  hostel_name_tamil String
+  hostel_name_english String [not null]
+  hostel_address_tamil String
+  hostel_address_english String [not null]
+  warden_name String [not null]
+  mobile_number String [unique, not null]
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table question {
+  question_id String [pk]
+  hostel_type String [not null]
+  question_category String [not null]
+  performance_score Int [not null]
+  input_type String [not null]
+  question String [unique, not null]
+  option_a String [not null]
+  option_b String [not null]
+  option_c String [not null]
+  option_d String [not null]
+  option_e String [not null]
+  option_f String [not null]
+  option_g String [not null]
+  option_h String [not null]
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  assigned_question assigned_question [not null]
+}
+
+Table survey {
+  survey_id String [pk]
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  section section [not null]
+}
+
+Table section {
+  section_id String [pk]
+  section_title String
+  section_desc String
+  survey_id String [not null]
+  survey survey
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  assigned_question assigned_question [not null]
+}
+
+Table assigned_question {
+  assigned_question_id String [pk]
+  section_id String [not null]
+  section section
+  question_id String [not null]
+  question question
+  is_mandatory Boolean [not null, default: true]
+  condition_to_display Json
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table otp {
+  otp_id String [pk]
+  mobile_number String [not null]
+  otp String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  expires_in String [not null]
+}
+
+Table softdeletedItems {
+  softdeleted_id String [pk]
+  item_id String [not null]
+  model_name String [not null]
+  is_active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
+
+Ref: tokens.user_id > user.user_id [delete: Cascade]
+
+Ref: section.survey_id > survey.survey_id
+
+Ref: assigned_question.section_id > section.section_id
+
+Ref: assigned_question.question_id > question.question_id
