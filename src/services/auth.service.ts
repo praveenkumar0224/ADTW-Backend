@@ -5,7 +5,8 @@ import ApiError from "../utils/ApiError.js";
 import prisma from "../client.js";
 import { userService } from "./user.service.js";
 import * as otpService from "./otp.service.js";
-
+import exclude from "../utils/exclude.js";
+import bcrypt from "bcryptjs"
 export const loginUserWithMobile = async (
   mobile_number: string,
   otp: string
@@ -47,4 +48,20 @@ export const resetPassword = async (
   } catch {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");
   }
+};
+
+
+export const loginUserWithEmail = async (email_address: string, password: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email_address },
+  });
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials");
+  }
+  const safeUser = exclude(user, ["password"]);
+  return safeUser;
 };

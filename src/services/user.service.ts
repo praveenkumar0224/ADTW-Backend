@@ -2,7 +2,8 @@ import { service } from "../lib/services/service.js";
 import Fuse from "fuse.js";
 import prisma from "../client.js";
 import * as R from "remeda";
-
+import exclude from "../utils/exclude.js";
+import bcrypt from "bcryptjs";
 const customServices = {
   searchUser: async (keyword: string) => {
     const user = await prisma.user.findMany({
@@ -32,6 +33,23 @@ const customServices = {
       return userSearch.at(0)?.item;
     }
     return [];
+  },
+  createV2: async (data: any) => {
+   
+    const randomPassword = "user@123";
+
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+  
+    const userData = { ...data, password: hashedPassword };
+  
+    let item = await prisma.user.create({
+      data: userData,
+    });
+  
+    // Exclude password from the returned user object
+    const safeItem = exclude(item, ["password"]);
+  
+    return safeItem;
   },
 };
 const CRUDServices = service<"user">("user");

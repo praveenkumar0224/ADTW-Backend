@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/me", auth("get"), authController.getUserData);
 // router.post('/register', validate(authValidation.register), authController.register);
 router.post("/login", validate(authValidation.login), authController.login);
+router.post("/loginWithEmail", validate(authValidation.loginWiithEmail), authController.loginwithEmail);
 router.post(
   "/send-otp",
   validate(authValidation.sendotp),

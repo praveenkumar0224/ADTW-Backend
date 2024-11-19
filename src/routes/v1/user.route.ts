@@ -18,7 +18,7 @@ router
   );
 router
   .route("/create")
-  .post(auth("manage"), validate(userValidation.create), userController.create);
+  .post(auth("manage"), validate(userValidation.create), userController.Createv2);
 
 router
   .route("/search")

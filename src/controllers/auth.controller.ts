@@ -62,3 +62,12 @@ export const sendOTP = catchAsync(async (req, res) => {
   await createOtp(mobile_number);
   responseHandler(res, null, httpStatus.OK);
 });
+
+export const loginwithEmail = catchAsync(async (req, res) => {
+  const { email_address, password } = req.body;
+  const user = await authService.loginUserWithEmail(email_address, password);
+  const token = await tokenService.generateAuthTokens({
+    user_id: user.user_id,
+  });
+  return responseHandler(res, { user, token }, httpStatus.OK);
+});

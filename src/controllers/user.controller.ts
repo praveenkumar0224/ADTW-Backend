@@ -9,6 +9,10 @@ const customController = {
     const data = await userService.searchUser(req.query.keyword as string);
     responseHandler(res, data);
   }),
+  Createv2: catchAsync(async (req, res) => {
+    const data = await userService.createV2(req.body)
+    responseHandler(res, data);
+  }),
 };
 
 export const userController = { ...CRUDController, ...customController };
