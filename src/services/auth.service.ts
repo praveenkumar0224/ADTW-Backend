@@ -7,6 +7,7 @@ import { userService } from "./user.service.js";
 import * as otpService from "./otp.service.js";
 import exclude from "../utils/exclude.js";
 import bcrypt from "bcryptjs"
+import { isPasswordMatch } from "../utils/encryption.js";
 export const loginUserWithMobile = async (
   mobile_number: string,
   otp: string
@@ -58,7 +59,10 @@ export const loginUserWithEmail = async (email_address: string, password: string
   if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
   }
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  console.log(user,password);
+  
+  const isPasswordValid =isPasswordMatch(password,user.password)
+  
   if (!isPasswordValid) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials");
   }

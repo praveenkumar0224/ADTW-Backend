@@ -4,6 +4,7 @@ import prisma from "../client.js";
 import * as R from "remeda";
 import exclude from "../utils/exclude.js";
 import bcrypt from "bcryptjs";
+import { encryptPassword } from "../utils/encryption.js";
 const customServices = {
   searchUser: async (keyword: string) => {
     const user = await prisma.user.findMany({
@@ -37,15 +38,17 @@ const customServices = {
   },
   createV2: async (data: any) => {
    
-    const randomPassword = "user@123";
 
-    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
   
-    const userData = { ...data, password: hashedPassword };
-  
+    const userData = { ...data, password: await encryptPassword("user@123") };
+    console.log(userData);
+    
+      
     let item = await prisma.user.create({
       data: userData,
     });
+  console.log(item);
   
     // Exclude password from the returned user object
     const safeItem = exclude(item, ["password"]);
