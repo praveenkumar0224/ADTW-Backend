@@ -54,7 +54,7 @@ export const update = {
       name: Joi.string(),
       designation: Joi.string(),
       target_freq_per_month: Joi.string(),
-      roles: Joi.array().items(Joi.string()),
+      roles: Joi.string().required(),
     })
     .min(1),
 };
@@ -70,6 +70,7 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
+        name:Joi.object(),
       })
       .required(),
     select: Joi.object().keys({

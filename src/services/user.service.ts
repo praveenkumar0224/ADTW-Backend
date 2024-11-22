@@ -17,6 +17,7 @@ const customServices = {
         email_address: true,
         target_freq_per_month: true,
         user_id: true,
+         createdAt:true
       },
     });
     const fuse = new Fuse(user, {
