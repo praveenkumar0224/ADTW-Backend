@@ -67,5 +67,6 @@ export const paginate = {
       page: Joi.number().integer(),
     }),
     include: Joi.object(),
+    keyword:Joi.string()
   }),
 };

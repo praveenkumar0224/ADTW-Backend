@@ -23,7 +23,7 @@ router
 router
   .route("/create")
   .post(
-    // auth("manage"),
+    auth("manage"),
     validate(questionValidation.create),
     questionController.create
   );

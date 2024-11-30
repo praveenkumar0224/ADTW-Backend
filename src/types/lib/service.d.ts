@@ -1,5 +1,5 @@
-import * as prismaClient from '@prisma/client'; // Adjust your import as necessary
-import prisma from '../../client.js';
+import * as prismaClient from "@prisma/client"; // Adjust your import as necessary
+import prisma from "../../client.js";
 // Define the types for ModelName and PrismaModels
 export type ModelName = Uncapitalize<
   Exclude<Extract<keyof prismaClient.PrismaClient, string>, `$${string}`>
@@ -7,7 +7,7 @@ export type ModelName = Uncapitalize<
 
 export type PrismaModels = {
   [M in ModelName]: Exclude<
-    Awaited<ReturnType<prismaClient.PrismaClient[Uncapitalize<M>]['create']>>,
+    Awaited<ReturnType<prismaClient.PrismaClient[Uncapitalize<M>]["create"]>>,
     null
   >;
 };
@@ -15,32 +15,35 @@ export type PrismaModels = {
 // Define input types based on models
 export type createInput<M extends ModelName> = prismaClient.Prisma.Args<
   (typeof prisma)[M],
-  'create'
->['data'];
+  "create"
+>["data"];
+export type createManyInput<M extends ModelName> = prismaClient.Prisma.Args<
+  (typeof prisma)[M],
+  "createMany"
+>["data"];
 export type updateInput<M extends ModelName> = prismaClient.Prisma.Args<
   (typeof prisma)[M],
-  'update'
->['data'];
+  "update"
+>["data"];
 export type whereInput<M extends ModelName> = prismaClient.Prisma.Args<
   (typeof prisma)[M],
-  'findFirst'
->['where'];
+  "findFirst"
+>["where"];
 export type filterInput<M extends ModelName> = prismaClient.Prisma.Args<
   (typeof prisma)[M],
-  'findMany'
->['where'];
-export type OrderByWithAggregationInput<M extends ModelName> = prismaClient.Prisma.Args<
-  (typeof prisma)[M],
-  'findMany'
->['orderBy'];
+  "findMany"
+>["where"];
+export type OrderByWithAggregationInput<M extends ModelName> =
+  prismaClient.Prisma.Args<(typeof prisma)[M], "findMany">["orderBy"];
 export type select<M extends ModelName> = prismaClient.Prisma.Args<
   (typeof prisma)[M],
-  'findMany'
->['select'];
+  "findMany"
+>["select"];
 
 // Define the service methods type
 export interface Service<M extends ModelName> {
   create(data: createInput): Promise<PrismaModels[M]>;
+  createMany(data: createInput): Promise<PrismaModels[M]>;
   list(
     filter: filterInput,
     options: {
@@ -69,4 +72,5 @@ export interface Service<M extends ModelName> {
       sortBy?: OrderByWithAggregationInput;
     }
   ): Promise<number>;
+  getModelFields(): Promise<Array<string>>;
 }

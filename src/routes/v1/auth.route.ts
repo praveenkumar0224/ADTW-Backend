@@ -9,21 +9,24 @@ const router = express.Router();
 router.get("/me", auth("get"), authController.getUserData);
 // router.post('/register', validate(authValidation.register), authController.register);
 router.post("/login", validate(authValidation.login), authController.login);
-router.post("/loginWithEmail", validate(authValidation.loginWiithEmail), authController.loginwithEmail);
 router.post(
   "/send-otp",
   validate(authValidation.sendotp),
   authController.sendOTP
 );
-
 router.post(
-	'/forgot-password',
-	validate(authValidation.forgotPassword),
-	authController.forgotPassword,
+  "/loginWithEmail",
+  validate(authValidation.loginwithEmail),
+  authController.loginwithEmail
 );
 router.post(
-	'/reset-password',
-	validate(authValidation.resetPassword),
-	authController.resetPassword,
+  "/forgot-password",
+  validate(authValidation.forgotPassword),
+  authController.forgotPassword
+);
+router.post(
+  "/reset-password",
+  validate(authValidation.resetPassword),
+  authController.resetPassword
 );
 export default router;

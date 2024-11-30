@@ -1,5 +1,5 @@
 import Joi from "joi";
-
+import { password } from "./custom.validation.js";
 
 export const create = {
   body: Joi.object().keys({
@@ -9,6 +9,7 @@ export const create = {
     designation: Joi.string(),
     target_freq_per_month: Joi.string(),
     roles: Joi.string().required(),
+    password: Joi.string().custom(password),
   }),
 };
 
@@ -54,7 +55,7 @@ export const update = {
       name: Joi.string(),
       designation: Joi.string(),
       target_freq_per_month: Joi.string(),
-      roles: Joi.string().required(),
+      roles: Joi.array().items(Joi.string()),
     })
     .min(1),
 };
@@ -70,7 +71,6 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        name:Joi.object(),
       })
       .required(),
     select: Joi.object().keys({
@@ -89,6 +89,7 @@ export const paginate = {
     include: Joi.object().keys({
       user: Joi.boolean(),
     }),
+    keyword: Joi.string(),
   }),
 };
 

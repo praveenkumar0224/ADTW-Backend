@@ -2,13 +2,8 @@ import Joi from "joi";
 
 export const create = {
   body: Joi.object().keys({
-    district_name: Joi.string(),
-    hostel_name_tamil: Joi.string(),
-    hostel_name_english: Joi.string().required(),
-    hostel_address_tamil: Joi.string(),
-    hostel_address_english: Joi.string().required(),
-    warden_name: Joi.string().required(),
-    mobile_number: Joi.string().required(),
+    option_text: Joi.string().required(),
+    question_id: Joi.string().uuid().required(),
   }),
 };
 
@@ -17,8 +12,7 @@ export const list = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        district_name: Joi.string(),
-        warden_name: Joi.string(),
+        question_id: Joi.string().uuid(),
       })
       .required(),
     select: Joi.object(),
@@ -33,30 +27,25 @@ export const list = {
 
 export const get = {
   params: Joi.object().keys({
-    hostel_id: Joi.string().required(),
+    option_id: Joi.string().required(),
   }),
 };
 
 export const update = {
   params: Joi.object().keys({
-    hostel_id: Joi.string().required(),
+    option_id: Joi.string().required(),
   }),
   body: Joi.object()
     .keys({
-      district_name: Joi.string(),
-      hostel_name_tamil: Joi.string(),
-      hostel_name_english: Joi.string(),
-      hostel_address_tamil: Joi.string(),
-      hostel_address_english: Joi.string(),
-      warden_name: Joi.string(),
-      mobile_number: Joi.string(),
+      option_text: Joi.string(),
+      question_id: Joi.string().uuid(),
     })
     .min(1),
 };
 
 export const deleteData = {
   params: Joi.object().keys({
-    hostel_id: Joi.string().required(),
+    option_id: Joi.string().required(),
   }),
 };
 
@@ -65,8 +54,7 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        district_name: Joi.string(),
-        warden_name: Joi.string(),
+        question_id: Joi.string().uuid(),
       })
       .required(),
     select: Joi.object(),
@@ -76,10 +64,9 @@ export const paginate = {
       page: Joi.number().integer(),
     }),
     include: Joi.object(),
-    keyword:Joi.string()
+    keyword: Joi.string(),
   }),
 };
-
 
 export const searchHostel = {
   query: Joi.object().keys({

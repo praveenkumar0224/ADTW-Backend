@@ -51,7 +51,6 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        category_name:Joi.any()
       })
       .required(),
     select: Joi.object(),
@@ -61,5 +60,6 @@ export const paginate = {
       page: Joi.number().integer(),
     }),
     include: Joi.object(),
+    keyword:Joi.string()
   }),
 };

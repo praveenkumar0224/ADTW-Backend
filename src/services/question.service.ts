@@ -2,7 +2,6 @@ import Fuse from "fuse.js";
 import prisma from "../client.js";
 import { service } from "../lib/services/service.js";
 import * as R from "remeda";
-import * as prismaCLient from "@prisma/client";
 
 const customServices = {
   searchQuestion: async (keyword: string) => {

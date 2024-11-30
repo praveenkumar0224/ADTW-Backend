@@ -1,7 +1,7 @@
-import * as R from 'remeda';
-import prisma from '../../client.js';
-import helper from '../../utils/utils.js';
-import exclude from '../../utils/exclude.js';
+import * as R from "remeda";
+import prisma from "../../client.js";
+import helper from "../../utils/utils.js";
+import exclude from "../../utils/exclude.js";
 
 import {
   createInput,
@@ -11,17 +11,18 @@ import {
   PrismaModels,
   whereInput,
   select,
-  updateInput
-} from '../../types/lib/service.js';
-import ApiError from '../../utils/ApiError.js';
-import httpStatus from 'http-status';
+  updateInput,
+  createManyInput,
+} from "../../types/lib/service.js";
+import ApiError from "../../utils/ApiError.js";
+import httpStatus from "http-status";
 
 export const service = <M extends ModelName>(model: M) => ({
   create: async (data: createInput<M>) => {
     let item = await (prisma[model] as any).create({
-      data
+      data,
     });
-    item = exclude(item, ['password']);
+    item = exclude(item, ["password"]);
     return item as PrismaModels[M];
   },
   list: async (
@@ -41,7 +42,7 @@ export const service = <M extends ModelName>(model: M) => ({
       where: filter,
       skip: page * limit,
       take: limit,
-      orderBy: sortBy ? sortBy : undefined
+      orderBy: sortBy ? sortBy : undefined,
     };
 
     if (!R.isEmpty(include)) {
@@ -62,14 +63,12 @@ export const service = <M extends ModelName>(model: M) => ({
     let updatedUser = await (prisma[model] as any).update({
       where,
       data: updateBody,
-      select: helper.fieldSelector(keys as string[])
+      select: helper.fieldSelector(keys as string[]),
     });
-    updatedUser = exclude(updatedUser, ['password']);
+    updatedUser = exclude(updatedUser, ["password"]);
     return updatedUser as PrismaModels[M];
   },
   delete: async (where: whereInput<M>) => {
-    console.log(where);
-    
     await (prisma[model] as any).softDelete(where);
     return true;
   },
@@ -79,21 +78,31 @@ export const service = <M extends ModelName>(model: M) => ({
   ) => {
     let data = await (prisma[model] as any).findFirst({
       where: where,
-      select: helper.fieldSelector(keys as string[])
+      select: helper.fieldSelector(keys as string[]),
     });
     if (R.isNullish(data)) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Data Not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Data Not found");
     }
     return data as PrismaModels[M];
   },
-  count: async (
-    filter: filterInput<M>,
-  ) => {
+  count: async (filter: filterInput<M>) => {
     const payload: any = {
-      where: filter
+      where: filter,
     };
 
     const data = await (prisma[model] as any).count(payload);
     return data;
-  }
+  },
+  getModelFields: async () => {
+    const fields =
+      await prisma.$queryRaw`SELECT column_name FROM information_schema.columns WHERE table_name = ${model}`;
+    const filteredColumns = helper.filterColumns(fields as any);
+    return filteredColumns;
+  },
+  createMany: async (data: createManyInput<M>) => {
+    let item = await (prisma[model] as any).createMany({
+      data,
+    });
+    return item as PrismaModels[M];
+  },
 });

@@ -39,6 +39,7 @@ model user {
   updatedAt             DateTime          @updatedAt
   deletedAt             DateTime?
   tokens                tokens[]
+  answer                answer[]
   assigned_survey       assigned_survey[]
 
   @@index([email_address, mobile_number])
@@ -88,7 +89,7 @@ model question {
 
 model option {
   option_id   String    @id @default(uuid())
-  option_text String   
+  option_text String    @unique
   question_id String?
   question    question? @relation(fields: [question_id], references: [question_id])
   is_active   Boolean   @default(true)
@@ -98,29 +99,32 @@ model option {
 }
 
 model assigned_survey {
-  assigned_survey String    @id @default(uuid())
-  user_id         String
-  hostel_id       String
-  user            user?     @relation(fields: [user_id], references: [user_id])
-  hostel          hostel?   @relation(fields: [hostel_id], references: [hostel_id])
-  is_active       Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  deletedAt       DateTime?
+  assigned_survey_id String    @id @default(uuid())
+  survey_id          String
+  survey             survey?   @relation(fields: [survey_id], references: [survey_id])
+  user_id            String?
+  hostel_id          String?
+  user               user?     @relation(fields: [user_id], references: [user_id])
+  hostel             hostel?   @relation(fields: [hostel_id], references: [hostel_id])
+  is_active          Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
 
-  @@index([user_id, hostel_id])
+  @@index([survey_id])
 }
 
 model survey {
-  survey_id   String    @id @default(uuid())
-  survey_name String
-  survey_type String?
-  status      Boolean   @default(false)
-  is_active   Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
-  section     section[]
+  survey_id       String            @id @default(uuid())
+  survey_name     String
+  survey_type     String?
+  status          Boolean           @default(false)
+  is_active       Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+  section         section[]
+  assigned_survey assigned_survey[]
 }
 
 model section {
@@ -128,7 +132,7 @@ model section {
   section_title     String?
   section_desc      String?
   survey_id         String
-  survey            survey?             @relation(fields: [survey_id], references: [survey_id])
+  survey            survey?             @relation(fields: [survey_id], references: [survey_id], onDelete: Cascade)
   is_active         Boolean             @default(true)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
@@ -139,14 +143,28 @@ model section {
 model assigned_question {
   assigned_question_id String    @id @default(uuid())
   section_id           String
-  section              section?  @relation(fields: [section_id], references: [section_id])
+  section              section?  @relation(fields: [section_id], references: [section_id], onDelete: Cascade)
   question_id          String
-  question             question? @relation(fields: [question_id], references: [question_id])
+  question             question? @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
   is_mandatory         Boolean   @default(true)
   condition_to_display Json?
   is_active            Boolean   @default(true)
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+  answer               answer[]
+}
+
+model answer {
+  answer_id            String             @id @default(uuid())
+  user_id              String
+  user                 user?              @relation(fields: [user_id], references: [user_id])
+  answer               String
+  assigned_question_id String
+  assigned_question    assigned_question? @relation(fields: [assigned_question_id], references: [assigned_question_id])
+  is_active            Boolean            @default(true)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
   deletedAt            DateTime?
 }
 

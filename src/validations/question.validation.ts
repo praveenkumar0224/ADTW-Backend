@@ -26,9 +26,8 @@ export const list = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        question_category: Joi.object(),
+        question_category: Joi.string(),
         hostel_type: Joi.string(),
-        question: Joi.string(),
       })
       .required(),
     select: Joi.object(),
@@ -73,9 +72,8 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        question_category: Joi.object(),
+        question_category: Joi.string(),
         hostel_type: Joi.string(),
-        question: Joi.object(),
       })
       .required(),
     select: Joi.object(),
@@ -85,6 +83,7 @@ export const paginate = {
       page: Joi.number().integer(),
     }),
     include: Joi.object(),
+    keyword:Joi.string()
   }),
 };
 

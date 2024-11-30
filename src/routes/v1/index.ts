@@ -4,9 +4,9 @@ import userRoute from "./user.route.js";
 import hostelRoute from "./hostel.route.js";
 import questionRoute from "./question.route.js";
 import assignedQuestionRoute from "./assigned_question.route.js";
-import CategoryRoute from "./category.route.js"
 import surveyRoute from "./survey.route.js";
-import path from "path";
+import answerRoute from "./answer.route.js";
+import optionRoute from "./option.route.js";
 
 const router = express.Router();
 
@@ -36,8 +36,12 @@ const defaultRoutes = [
     route: surveyRoute,
   },
   {
-    path: "/category",
-    route: CategoryRoute,
+    path: "/answer",
+    route: answerRoute,
+  },
+  {
+    path: "/option",
+    route: optionRoute,
   },
 ];
 

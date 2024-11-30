@@ -23,8 +23,6 @@ export const createOtp = async (
     specialChars: false,
     lowerCaseAlphabets: false,
   });
-  console.log(otp);
-  
   // Want to send the otp to the sms
   if (config.env !== "local" && process.env.NODE_ENV !== "development") {
     if (process.env.NODE_ENV === "production") {
@@ -35,7 +33,7 @@ export const createOtp = async (
     data: {
       mobile_number,
       expires_in: config.otp.expires_time,
-      otp,
+      otp: "123456", // otp is hard coded for development
     },
   });
 };

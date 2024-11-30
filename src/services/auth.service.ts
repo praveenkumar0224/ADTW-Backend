@@ -5,9 +5,9 @@ import ApiError from "../utils/ApiError.js";
 import prisma from "../client.js";
 import { userService } from "./user.service.js";
 import * as otpService from "./otp.service.js";
-import exclude from "../utils/exclude.js";
-import bcrypt from "bcryptjs"
 import { isPasswordMatch } from "../utils/encryption.js";
+import exclude from "../utils/exclude.js";
+
 export const loginUserWithMobile = async (
   mobile_number: string,
   otp: string
@@ -51,21 +51,37 @@ export const resetPassword = async (
   }
 };
 
-
-export const loginUserWithEmail = async (email_address: string, password: string) => {
+export const loginUserWithEmail = async (
+  email_address: string,
+  password: string
+) => {
   const user = await prisma.user.findUnique({
     where: { email_address },
   });
   if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
   }
-  console.log(user,password);
-  
-  const isPasswordValid =isPasswordMatch(password,user.password)
-  
+  const isPasswordValid = isPasswordMatch(password, user.password);
+
   if (!isPasswordValid) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials");
   }
   const safeUser = exclude(user, ["password"]);
   return safeUser;
+};
+
+export const logout = async (refreshToken: string): Promise<void> => {
+  const refreshTokenData = await prisma.tokens.findFirst({
+    where: {
+      token: refreshToken,
+      type: "ACCESS",
+    },
+  });
+  if (!refreshTokenData) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+  }
+
+  await prisma.tokens.delete({
+    where: { token_id: refreshTokenData.token_id },
+  });
 };

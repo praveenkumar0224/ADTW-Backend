@@ -24,13 +24,6 @@ export const login = {
   }),
 };
 
-export const loginWiithEmail = {
-  body: Joi.object().keys({
-  email_address: Joi.string().required(),
-  password: Joi.string().required(),
-  }),
-};
-
 export const logout = {
   body: Joi.object().keys({
     token: Joi.string().required(),
@@ -50,8 +43,9 @@ export const sendotp = {
 
 export const forgotPassword = {
   body: Joi.object().keys({
-    mobile_number: Joi.string().regex(/^[1-9][0-9]{9}$/)
-      .messages({ 'string.pattern.base': 'Phone number must have 10 digits.' })
+    mobile_number: Joi.string()
+      .regex(/^[1-9][0-9]{9}$/)
+      .messages({ "string.pattern.base": "Phone number must have 10 digits." })
       .required(),
   }),
 };
@@ -62,5 +56,12 @@ export const resetPassword = {
   }),
   body: Joi.object().keys({
     password: Joi.string().required().custom(password),
+  }),
+};
+
+export const loginwithEmail = {
+  body: Joi.object().keys({
+    email_address: Joi.string().email().required(),
+    password: Joi.string().custom(password).required(),
   }),
 };

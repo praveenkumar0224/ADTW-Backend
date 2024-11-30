@@ -3,8 +3,7 @@ import Fuse from "fuse.js";
 import prisma from "../client.js";
 import * as R from "remeda";
 import exclude from "../utils/exclude.js";
-import bcrypt from "bcryptjs";
-import { encryptPassword } from "../utils/encryption.js";
+
 const customServices = {
   searchUser: async (keyword: string) => {
     const user = await prisma.user.findMany({
@@ -18,7 +17,6 @@ const customServices = {
         email_address: true,
         target_freq_per_month: true,
         user_id: true,
-         createdAt:true
       },
     });
     const fuse = new Fuse(user, {
@@ -37,25 +35,14 @@ const customServices = {
     return [];
   },
   createV2: async (data: any) => {
-   
-
-
-  
-    const userData = { ...data, password: await encryptPassword("user@123") };
-    console.log(userData);
-    
-      
+    const userData = { ...data, password: "user@123" };
     let item = await prisma.user.create({
       data: userData,
     });
-  console.log(item);
-  
-    // Exclude password from the returned user object
     const safeItem = exclude(item, ["password"]);
-  
     return safeItem;
   },
 };
 const CRUDServices = service<"user">("user");
 
-export const userService = { ...customServices, ...CRUDServices };
+export const userService = { ...CRUDServices, ...customServices };
