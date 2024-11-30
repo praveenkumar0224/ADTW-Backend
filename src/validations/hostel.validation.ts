@@ -67,6 +67,7 @@ export const paginate = {
         is_active: Joi.boolean(),
         district_name: Joi.string(),
         warden_name: Joi.string(),
+        hostel_name_english: Joi.object(),
       })
       .required(),
     select: Joi.object(),
