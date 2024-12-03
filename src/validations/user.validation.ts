@@ -71,6 +71,7 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
+        roles:Joi.string()
       })
       .required(),
     select: Joi.object().keys({
