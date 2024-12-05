@@ -102,8 +102,9 @@ model assigned_survey {
   assigned_survey_id String    @id @default(uuid())
   survey_id          String
   survey             survey?   @relation(fields: [survey_id], references: [survey_id])
-  user_id            String?
-  hostel_id          String?
+  user_id            String
+  hostel_id          String
+  survey_status      Boolean   @default(false)
   user               user?     @relation(fields: [user_id], references: [user_id])
   hostel             hostel?   @relation(fields: [hostel_id], references: [hostel_id])
   is_active          Boolean   @default(true)
