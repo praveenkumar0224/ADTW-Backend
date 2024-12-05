@@ -2,9 +2,9 @@ import Joi from "joi";
 
 export const create = {
   body: Joi.object().keys({
-    user_id: Joi.string().uuid(),
-    answer: Joi.string(),
-    assigned_question_id: Joi.string().uuid(),
+    user_id: Joi.string().uuid().required(),
+    answer: Joi.string().required(),
+    assigned_question_id: Joi.string().uuid().required(),
   }),
 };
 
@@ -66,6 +66,18 @@ export const paginate = {
       page: Joi.number().integer(),
     }),
     include: Joi.object(),
-    keyword:Joi.string()
+    keyword: Joi.string(),
+  }),
+};
+export const createMany = {
+  body: Joi.object().keys({
+    data: Joi.array().items(
+      Joi.object().keys({
+        user_id: Joi.string().uuid().required(),
+        answer: Joi.string().required(),
+        assigned_question_id: Joi.string().uuid().required(),
+      })
+    ),
+    assigned_survey_id: Joi.string().uuid().required(),
   }),
 };

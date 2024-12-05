@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .post(auth("manage"), validate(answerValidation.list), answerController.list);
+  .post(auth("get"), validate(answerValidation.list), answerController.list);
 router
   .route("/paginate")
   .post(
@@ -23,7 +23,13 @@ router
     validate(answerValidation.create),
     answerController.create
   );
-
+router
+  .route("/create-bulk")
+  .post(
+    auth("get"),
+    validate(answerValidation.createMany),
+    answerController.createMany
+  );
 router
   .route("/:question_id")
   .get(auth("get"), validate(answerValidation.get), answerController.get)

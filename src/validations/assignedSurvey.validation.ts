@@ -3,8 +3,8 @@ import Joi from "joi";
 export const create = {
   body: Joi.object().keys({
     survey_id: Joi.string().uuid().required(),
-    user_id: Joi.string().uuid(),
-    hostel_id: Joi.string().uuid(),
+    user_id: Joi.string().uuid().required(),
+    hostel_id: Joi.string().uuid().required(),
   }),
 };
 
@@ -12,8 +12,8 @@ export const createMany = {
   body: Joi.array().items(
     Joi.object().keys({
       survey_id: Joi.string().uuid().required(),
-      user_id: Joi.string().uuid(),
-      hostel_id: Joi.string().uuid(),
+      user_id: Joi.string().uuid().required(),
+      hostel_id: Joi.string().uuid().required(),
     })
   ),
 };

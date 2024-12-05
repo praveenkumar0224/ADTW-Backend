@@ -6,7 +6,7 @@ import Fuse from "fuse.js";
 import { ModelName } from "../../types/lib/service.js";
 
 export const controller = <M extends ModelName>(service: Service<M>) => ({
-  create: catchAsync(async (req, res) => {    
+  create: catchAsync(async (req, res) => {
     const data = await service.create(req.body);
     responseHandler(res, data, httpStatus.CREATED);
   }),
@@ -40,20 +40,20 @@ export const controller = <M extends ModelName>(service: Service<M>) => ({
       keyword = "",
     } = req.body;
     const data = await service.list(filter, options, include, select);
-    const fields = await service.getModelFields();
-    const fuse = new Fuse(data, {
-      keys: fields,
-      threshold: 0.5,
-      location: 0,
-      distance: 100,
-      includeMatches: true,
-      includeScore: true,
-      useExtendedSearch: true,
-    });
 
     // Perform search if keyword is provided
     let filteredData = data;
     if (keyword) {
+      const fields = await service.getModelFields();
+      const fuse = new Fuse(data, {
+        keys: fields,
+        threshold: 0.5,
+        location: 0,
+        distance: 100,
+        includeMatches: true,
+        includeScore: true,
+        useExtendedSearch: true,
+      });
       const searchResults = fuse.search(keyword);
       filteredData = searchResults.map((result) => result.item);
     }
