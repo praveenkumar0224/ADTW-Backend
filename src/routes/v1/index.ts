@@ -8,6 +8,7 @@ import surveyRoute from "./survey.route.js";
 import answerRoute from "./answer.route.js";
 import optionRoute from "./option.route.js";
 import categoryRoute from "./category.route.js"
+import assignedSurvey from "./assigned_survey.route.js"
 
 const router = express.Router();
 
@@ -47,6 +48,10 @@ const defaultRoutes = [
   {
     path: "/category",
     route: categoryRoute,
+  },
+  {
+    path: "/assigned-survey",
+    route: assignedSurvey,
   },
 ];
 

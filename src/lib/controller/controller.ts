@@ -6,12 +6,12 @@ import Fuse from "fuse.js";
 import { ModelName } from "../../types/lib/service.js";
 
 export const controller = <M extends ModelName>(service: Service<M>) => ({
-  create: catchAsync(async (req, res) => {
+  create: catchAsync(async (req, res) => {    
     const data = await service.create(req.body);
     responseHandler(res, data, httpStatus.CREATED);
   }),
   createMany: catchAsync(async (req, res) => {
-    const data = await service.create(req.body);
+    const data = await service.createMany(req.body);
     responseHandler(res, data, httpStatus.CREATED);
   }),
   get: catchAsync(async (req, res) => {

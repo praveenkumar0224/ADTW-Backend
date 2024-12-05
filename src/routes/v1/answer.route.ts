@@ -19,7 +19,7 @@ router
 router
   .route("/create")
   .post(
-    auth("manage"),
+    auth("get"),
     validate(answerValidation.create),
     answerController.create
   );
@@ -28,12 +28,12 @@ router
   .route("/:question_id")
   .get(auth("get"), validate(answerValidation.get), answerController.get)
   .patch(
-    auth("manage"),
+    auth("get"),
     validate(answerValidation.update),
     answerController.update
   )
   .delete(
-    auth("manage"),
+    auth("get"),
     validate(answerValidation.deleteData),
     answerController.delete
   );

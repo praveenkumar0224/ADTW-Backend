@@ -72,7 +72,7 @@ export const paginate = {
     filter: Joi.object()
       .keys({
         is_active: Joi.boolean(),
-        question_category: Joi.string(),
+        question_category: Joi.object(),
         hostel_type: Joi.string(),
       })
       .required(),
