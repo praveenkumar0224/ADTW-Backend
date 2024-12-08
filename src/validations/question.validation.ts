@@ -5,7 +5,7 @@ export const create = {
     question_category: Joi.object().keys({
       category_name: Joi.string().required(),
     }),
-    performance_score: Joi.number().required(),
+    // performance_score: Joi.number().required(),
     question: Joi.string().required(),
     question_desc: Joi.string(),
     input_type: Joi.string().required(),
@@ -52,9 +52,8 @@ export const update = {
   }),
   body: Joi.object()
     .keys({
-      hostel_type: Joi.string(),
-      question_category: Joi.string(),
-      performance_score: Joi.string(),
+      input_type: Joi.string(),
+      question_category: Joi.object().keys(),
       question: Joi.string(),
       question_desc: Joi.string(),
     })

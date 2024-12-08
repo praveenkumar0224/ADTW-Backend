@@ -74,9 +74,8 @@ model categories {
 model question {
   question_id       String              @id @default(uuid())
   question_category categories          @relation(fields: [category_id], references: [category_id])
-  performance_score Int
   input_type        String
-  question          String              @unique
+  question          String         
   question_desc     String?
   options           option[]
   is_active         Boolean             @default(true)
@@ -89,7 +88,7 @@ model question {
 
 model option {
   option_id   String    @id @default(uuid())
-  option_text String    @unique
+  option_text String   
   question_id String?
   question    question? @relation(fields: [question_id], references: [question_id])
   is_active   Boolean   @default(true)
@@ -111,7 +110,6 @@ model assigned_survey {
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   deletedAt          DateTime?
-
   @@index([survey_id])
 }
 
