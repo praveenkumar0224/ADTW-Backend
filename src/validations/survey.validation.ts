@@ -70,3 +70,9 @@ export const paginate = {
     keyword:Joi.string()
   }),
 };
+
+export const getAnswers = {
+  query: Joi.object().keys({
+    survey_id: Joi.string().required().uuid(),
+  }),
+};

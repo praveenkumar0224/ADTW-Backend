@@ -9,7 +9,7 @@ import answerRoute from "./answer.route.js";
 import optionRoute from "./option.route.js";
 import categoryRoute from "./category.route.js"
 import assignedSurvey from "./assigned_survey.route.js"
-
+import section from './section.route.js'
 const router = express.Router();
 
 const defaultRoutes = [
@@ -53,6 +53,11 @@ const defaultRoutes = [
     path: "/assigned-survey",
     route: assignedSurvey,
   },
+  {
+    path: "/section",
+    route: section,
+  },
+  
 ];
 
 for (const route of defaultRoutes) {
