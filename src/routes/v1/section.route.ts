@@ -29,7 +29,7 @@ router
   );
 
 router
-  .route("/:assigned_question_id")
+  .route("/:section_id")
   .get(auth("get"), validate(sectionValidation.get), sectionController.get)
   .patch(
     auth("manage"),

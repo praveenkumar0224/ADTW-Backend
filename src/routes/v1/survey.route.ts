@@ -23,7 +23,7 @@ router
     validate(surveyValidation.create),
     surveyController.create
   );
-  router
+router
   .route("/get-answers")
   .get(
     auth("get"),
@@ -31,7 +31,7 @@ router
     surveyController.getAnswers
   );
 router
-  .route("/:assigned_question_id")
+  .route("/:survey_id")
   .get(auth("get"), validate(surveyValidation.get), surveyController.get)
   .patch(
     auth("manage"),
