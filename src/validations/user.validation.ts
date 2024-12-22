@@ -55,7 +55,7 @@ export const update = {
       name: Joi.string(),
       designation: Joi.string(),
       target_freq_per_month: Joi.string(),
-      roles: Joi.array().items(Joi.string()),
+      roles: Joi.string(),
     })
     .min(1),
 };
